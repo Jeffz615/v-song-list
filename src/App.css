@@ -1,0 +1,58 @@
+@import '~antd/dist/antd.css';
+
+div.ant-table-wrapper {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+div.my-table-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome Safari */
+}
+
+div.my-table-wrapper {
+    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+div.ant-table-content > table > thead.ant-table-thead > tr > th.ant-table-cell {
+    padding: 8px 1px;
+}
+
+div.ant-table-content > table > thead.ant-table-thead > tr > th.ant-table-cell:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+    width: 0;
+}
+
+div.ant-table-content > table > tbody.ant-table-tbody > tr.ant-table-row > td.ant-table-cell {
+    padding: 8px 1px;
+}
+
+div.ant-table-content > table > .ant-table-tbody > tr.ant-table-row:hover > td, .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+    background-color: rgba(255, 192, 203, 0.62);
+}
+
+div.ant-drawer.ant-drawer-open .ant-drawer-content-wrapper {
+    max-width: 100%;
+}
+
+.InfoButtonWrapper Button {
+    width: 90%;
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1em;
+    border-radius: 20px;
+    border: #000c17 solid 2px;
+}
+
+.InfoButtonWrapper Button .BtnContent {
+    vertical-align: text-bottom;
+    font-size: 18px;
+    line-height: 1em;
+}
+
+.InfoButtonWrapper Button .BtnContent > img {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 20px;
+    border-radius: 5px;
+}

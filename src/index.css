@@ -1,6 +1,10 @@
-@font-face {
-  font-family: 'zcool-happy';
-  src: url('./assets/fonts/zcool-happy.ttf');
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 body {

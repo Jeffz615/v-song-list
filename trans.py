@@ -10,22 +10,33 @@ def parse_xlsx(xlsx_file: str):
     d = []
     wb = load_workbook(xlsx_file)
     ws = wb.active
+    i = 0
+    totalTags = set()
     for row in ws[f'2:{ws.max_row}']:
         if row[1].value is None:
             break
+        money = row[0].value and int(row[0].value) or 0
+        tags = [pinyin.get_initial(row[1].value.strip()[:1], delimiter='').upper()[:1]] + (['付费'] if money else []) + (row[4].value and [x.upper() for x in row[4].value.replace('，', ',').strip().split(',')] or [])
         d.append({
-            'money': row[0].value and int(row[0].value) or 0,
+            'key': i,
+            'money': money,
             'song': row[1].value.strip(),
             'singer': row[2].value and row[2].value.strip() or '',
             'link': row[3].value and row[3].value.strip() or '',
-            'tags': [pinyin.get_initial(row[1].value.strip()[:1], delimiter='').upper()[:1]] + (row[4].value and [x.upper() for x in row[4].value.replace('，', ',').strip().split(',')] or []),
+            'tags': tags,
             'remark': row[5].value and row[5].value.strip() or '',
         })
-    return d
+        for tag in tags:
+            totalTags.add(tag)
+        i += 1
+    return d, totalTags
 
 
 if __name__ == '__main__':
-    data = parse_xlsx(sys.argv[1] if len(sys.argv) > 1 else input('pull xlsx file here:'))
+    data, allTagsSet = parse_xlsx(sys.argv[1] if len(sys.argv) > 1 else '幽灵歌单整理.xlsx')
+    allTagsList = list(allTagsSet)
+    allTagsList.sort()
     with open(os.path.join('src', 'assets', 'data.json'), 'w', encoding='utf-8') as f:
-        json.dump({'data': data}, f, separators=(',', ':'))
-    print(json.dumps({'data': data}, indent=4))
+        json.dump({'data': data, 'tags':allTagsList}, f, separators=(',', ':'))
+#     print(json.dumps({'data': data}, indent=4))
+    print('OK')

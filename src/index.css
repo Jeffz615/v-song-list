@@ -14,7 +14,7 @@ body {
   sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: url("https://s2.loli.net/2022/06/03/jHLYhtnSbUJVFo2.jpg") fixed;
+  background: url("./assets/bg.jpg") fixed;
   background-size: cover;
 }
 

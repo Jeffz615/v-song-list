@@ -5,6 +5,7 @@ import type {ColumnsType} from 'antd/lib/table';
 import jData from './assets/data.json';
 import copy from 'copy-to-clipboard';
 import lblImage from './assets/lbl.jpg';
+import avatarImage from './assets/avatar.jpg';
 import './App.css';
 
 const {Content} = Layout;
@@ -211,7 +212,7 @@ const App: React.FC = () => {
                                 <Avatar
                                     className={'bili-avatar'}
                                     size={{xs: 100, sm: 150, md: 180, lg: 200, xl: 220, xxl: 250}}
-                                    src={'https://s2.loli.net/2022/06/03/YuOtwz1mhNpa6sq.jpg'}
+                                    src={avatarImage}
                                     style={{
                                         border: '3px solid ' + baseColor,
                                         boxShadow: '2px 2px #0000007f',
@@ -235,7 +236,7 @@ const App: React.FC = () => {
                                 lineHeight: '1.2em',
                                 textShadow: '2px 2px #0000007f',
                                 fontWeight: "bolder",
-                            }}>带来了她的{songNum}首歌</span>
+                            }}>带来了她的{songNum}首歌~</span>
                         </Row>
                         <Row justify={'center'}>
                             <span style={{
@@ -244,7 +245,16 @@ const App: React.FC = () => {
                                 lineHeight: '1.2em',
                                 textShadow: '2px 2px black',
                                 fontWeight: "bolder",
-                            }}>~双击即可复制点歌指令~</span>
+                            }}>~点击头像查看主播信息~</span>
+                        </Row>
+                        <Row justify={'center'}>
+                            <span style={{
+                                fontSize: '1rem',
+                                color: "white",
+                                lineHeight: '1.2em',
+                                textShadow: '2px 2px black',
+                                fontWeight: "bolder",
+                            }}>~双击列表即可复制点歌指令~</span>
                         </Row>
                         <Row style={{margin: '0 10px'}}>{jData?.tags?.map((tag) => {
                             return (

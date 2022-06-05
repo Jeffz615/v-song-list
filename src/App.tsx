@@ -372,6 +372,20 @@ const App: React.FC = () => {
                                 <span>B站直播间</span>
                             </div>
                         </Button>
+                        <Button className={'BtnMusic163'}
+                                onClick={() => window.open("https://music.163.com/#/artist?id=32953961")}>
+                            <div className={'BtnContent'}>
+                                <img alt={'music163'} src={'http://p3.music.126.net/tBTNafgjNnTL1KlZMt7lVA==/18885211718935735.jpg'}></img>
+                                <span>网易云音乐</span>
+                            </div>
+                        </Button>
+                        <Button className={'Btn5Sing'}
+                                onClick={() => window.open("http://5sing.kugou.com/50168798/default.html")}>
+                            <div className={'BtnContent'}>
+                                <img alt={'5sing'} src={'http://5sing.kugou.com/favicon.ico'}></img>
+                                <span>5sing-中国原创音乐基地</span>
+                            </div>
+                        </Button>
                         <Button className={'BtnBiliLive'}
                                 onClick={() => window.open("https://space.bilibili.com/1277624886")}>
                             <div className={'BtnContent'}>

@@ -16,7 +16,7 @@ def parse_xlsx(xlsx_file: str):
         if row[1].value is None:
             break
         money = row[0].value and int(row[0].value) or 0
-        tags = [pinyin.get_initial(row[1].value.strip()[:1], delimiter='').upper()[:1]] + (['付费'] if money else []) + (row[4].value and [x.upper() for x in row[4].value.replace('，', ',').strip().split(',')] or [])
+        tags = [pinyin.get_initial(row[1].value.strip()[:1], delimiter='').upper()[:1]] + (['付费'] if money else ['免费']) + (row[4].value and [x.upper() for x in row[4].value.replace('，', ',').strip().split(',')] or [])
         d.append({
             'key': i,
             'money': money,

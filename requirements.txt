@@ -1,2 +1,2 @@
 openpyxl
-pinyin
+pypinyin

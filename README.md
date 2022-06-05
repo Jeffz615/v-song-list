@@ -1,4 +1,12 @@
-[幽灵车尔尼桑的歌单（腾讯云静态网站托管）](https://ock.cn/j7tnh)
+[<img alt="幽头" src="src/assets/avatar.jpg" style="border-radius: 50%; border: pink solid 3px; width: 150px;"></img>](https://ock.cn/j7tnh)
+
+## LICENSE
+
+要求不多，标注来源即可。
+
+## 提交歌单
+
+欢迎幽灵车尔尼桑的单推人们PR提交歌单
 
 ## 使用技术
 

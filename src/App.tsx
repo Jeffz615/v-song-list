@@ -165,36 +165,39 @@ const App: React.FC = () => {
     ];
 
     useEffect(() => {
-        if (searchValue !== '') {
-            setData(
-                jData?.data?.filter(
-                    item => {
-                        let words: string[] = searchValue.trim().replaceAll(',', ' ').replaceAll('，', ' ').split(' ');
-                        for (let word of words) {
-                            let lword = word.toUpperCase();
-                            if (lword.startsWith("!T:")) {
-                                if (!(item?.tags?.indexOf(lword.slice(3)) !== -1))
+        const timer = setTimeout(() => {
+            if (searchValue !== '') {
+                setData(
+                    jData?.data?.filter(
+                        item => {
+                            let words: string[] = searchValue.trim().replaceAll(',', ' ').replaceAll('，', ' ').split(' ');
+                            for (let word of words) {
+                                let lword = word.toUpperCase();
+                                if (lword.startsWith("!T:")) {
+                                    if (!(item?.tags?.indexOf(lword.slice(3)) !== -1))
+                                        return false;
+                                    continue;
+                                }
+                                if (lword.startsWith("!M:")) {
+                                    if (!(item?.money === parseInt(lword.slice(3))))
+                                        return false;
+                                    continue;
+                                }
+                                if (!(item?.song?.toUpperCase().indexOf(lword) !== -1 ||
+                                    item?.singer?.toUpperCase().indexOf(lword) !== -1 ||
+                                    item?.remark?.toUpperCase().indexOf(lword) !== -1))
                                     return false;
-                                continue;
                             }
-                            if (lword.startsWith("!M:")) {
-                                if (!(item?.money === parseInt(lword.slice(3))))
-                                    return false;
-                                continue;
-                            }
-                            if (!(item?.song?.toUpperCase().indexOf(lword) !== -1 ||
-                                item?.singer?.toUpperCase().indexOf(lword) !== -1 ||
-                                item?.tags?.indexOf(lword) !== -1 ||
-                                item?.remark?.toUpperCase().indexOf(lword) !== -1))
-                                return false;
+                            return true;
                         }
-                        return true;
-                    }
-                )
-            );
-        } else {
-            setData(jData?.data);
-        }
+                    )
+                );
+            } else {
+                setData(jData?.data);
+            }
+        }, 200);
+
+        return () => clearTimeout(timer);
     }, [searchValue]);
 
     useEffect(() => {
@@ -375,7 +378,8 @@ const App: React.FC = () => {
                         <Button className={'BtnMusic163'}
                                 onClick={() => window.open("https://music.163.com/#/artist?id=32953961")}>
                             <div className={'BtnContent'}>
-                                <img alt={'music163'} src={'http://p3.music.126.net/tBTNafgjNnTL1KlZMt7lVA==/18885211718935735.jpg'}></img>
+                                <img alt={'music163'}
+                                     src={'http://p3.music.126.net/tBTNafgjNnTL1KlZMt7lVA==/18885211718935735.jpg'}></img>
                                 <span>网易云音乐</span>
                             </div>
                         </Button>
@@ -407,6 +411,20 @@ const App: React.FC = () => {
                                 <span>提问箱</span>
                             </div>
                         </Button>
+                        <div style={{
+                            color: "rgba(0,0,0,0.3)"
+                        }}>
+                            Power&nbsp;by&nbsp;
+                            <a
+                                href={"https://github.com/Jeffz615/v-song-list"}
+                                target='_blank'
+                                rel="noreferrer"
+                                style={{
+                                    color: "rgba(0,0,0,0.5)",
+                                    textDecoration: "underline"
+                                }}>v-song-list
+                            </a>
+                        </div>
                     </Row>
                 </Drawer>
             </Content>

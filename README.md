@@ -1,4 +1,4 @@
-[<img alt="幽头" src="src/assets/avatar.jpg" style="border-radius: 50%; border: pink solid 3px; width: 150px;"></img>](https://ock.cn/j7tnh)
+[<img alt="幽头" src="src/assets/avatar.jpg" style="border-radius: 50%; border: pink solid 3px; width: 150px;"></img>](https://u0song.com/)
 
 ## LICENSE
 
@@ -14,7 +14,7 @@ python 利用excel 生成json
 
 react + antd 前端
 
-腾讯云静态网站托管 部署
+4everland 部署
 
 ## 本地部署指令
 
@@ -41,7 +41,7 @@ npm run build
 
 构建成功后会生成在`build`文件夹内
 
-## 腾讯云静态网站部署
+## 4everland部署
 
 1. fork本仓库并进行修改，生成新json；
-2. 按照腾讯云静态网站部署的步骤关联你fork的仓库进行部署。
+2. 按照4everland的步骤关联你fork的仓库进行部署。

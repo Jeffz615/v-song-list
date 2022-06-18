@@ -23,6 +23,8 @@ def parse_xlsx(xlsx_file: str):
         tags += ['付费'] if money else ['免费']
         tags += ['歌切'] if link else []
         tags += row[4].value and [x.upper() for x in row[4].value.replace('，', ',').strip().split(',')] or []
+        if "学习中" in tags:
+            continue
         remark = row[5].value and row[5].value.strip() or ''
         remark += f' {"".join(lazy_pinyin(song))} {"".join(lazy_pinyin(singer))}'
         remark = remark.strip()

@@ -6,6 +6,7 @@ import jData from './assets/data.json';
 import copy from 'copy-to-clipboard';
 import lblImage from './assets/lbl.jpg';
 import avatarImage from './assets/avatar.jpg';
+import pixelImage from './assets/pixel.gif';
 import './App.css';
 
 const {Content} = Layout;
@@ -337,6 +338,7 @@ const App: React.FC = () => {
                 <Drawer visible={visable} onClose={closeDrawer} size={"default"}>
                     <Row justify={"center"}>
                         <Col span={24} style={{fontSize: '18px', marginBottom: '20px'}}>
+                            <div><img src={pixelImage} alt="pixel" style={{width: '40%'}}/></div>
                             <div style={{fontSize: '24px'}}>~幽灵2021置顶更新~</div>
                             <div>大家好，这里是<span
                                 style={{color: "#d58a98", fontSize: '20px', fontWeight: "bolder"}}>幽灵车尔尼桑</span>，一个投稿更新直播随缘的up主

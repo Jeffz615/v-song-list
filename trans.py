@@ -4,6 +4,7 @@ from pypinyin import lazy_pinyin
 import json
 import sys
 import os
+import hashlib
 
 
 def parse_xlsx(xlsx_file: str):
@@ -47,7 +48,13 @@ if __name__ == '__main__':
     data, allTagsSet = parse_xlsx(sys.argv[1] if len(sys.argv) > 1 else '幽灵歌单整理.xlsx')
     allTagsList = list(allTagsSet)
     allTagsList.sort()
+    jdata = json.dumps({'data': data, 'tags': allTagsList}, separators=(',', ':'))
     with open(os.path.join('src', 'assets', 'data.json'), 'w', encoding='utf-8') as f:
-        json.dump({'data': data, 'tags':allTagsList}, f, separators=(',', ':'))
+        f.write(jdata)
 #     print(json.dumps({'data': data}, indent=4))
+    hasher = hashlib.md5()
+    hasher.update(jdata.encode('utf-8'))
+    with open(os.path.join('public', 'data_hash.txt'), 'w', encoding='utf-8') as f:
+        f.write(hasher.hexdigest())
+    print(f"md5:{hasher.hexdigest()}")
     print('OK')

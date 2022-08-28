@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {SyncOutlined, YoutubeOutlined, SearchOutlined, RocketOutlined} from '@ant-design/icons';
+import {SyncOutlined, YoutubeOutlined, SearchOutlined} from '@ant-design/icons';
 import {Layout, Avatar, Row, Col, Input, Button, BackTop, message, Table, Tag, Drawer} from 'antd';
 import type {ColumnsType} from 'antd/lib/table';
 import jData from './assets/data.json';
 import copy from 'copy-to-clipboard';
 import lblImage from './assets/lbl.jpg';
 import avatarImage from './assets/avatar.jpg';
-import pixelImage from './assets/pixel.gif';
+import pixelImage from './assets/pixel.png';
 import './App.css';
 
 const {Content} = Layout;
@@ -326,19 +326,12 @@ const App: React.FC = () => {
                         </Row>
                     </Col>
                 </Row>
-                <BackTop>
-                    <div><RocketOutlined style={{
-                        fontSize: 40,
-                        color: "white",
-                        backgroundColor: '#00000050',
-                        padding: 5
-                    }}/>
-                    </div>
+                <BackTop style={{height: '49em', width: '23em', fontSize: "0.3rem"}}>
+                    <div><img src={pixelImage} alt="pixel" style={{width: '100%'}}/></div>
                 </BackTop>
                 <Drawer visible={visable} onClose={closeDrawer} size={"default"}>
                     <Row justify={"center"}>
                         <Col span={24} style={{fontSize: '18px', marginBottom: '20px'}}>
-                            <div><img src={pixelImage} alt="pixel" style={{width: '40%'}}/></div>
                             <div style={{fontSize: '24px'}}>~幽灵2021置顶更新~</div>
                             <div>大家好，这里是<span
                                 style={{color: "#d58a98", fontSize: '20px', fontWeight: "bolder"}}>幽灵车尔尼桑</span>，一个投稿更新直播随缘的up主

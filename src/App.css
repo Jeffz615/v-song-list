@@ -56,3 +56,88 @@ div.ant-drawer.ant-drawer-open .ant-drawer-content-wrapper {
     left: 20px;
     border-radius: 5px;
 }
+
+div.chat-pannel {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+div.chat-pannel-in {
+    display: none;
+}
+
+div.chat-pannel-in.show {
+    display: block;
+}
+
+div.nickname-btn,
+div.send-msg-btn {
+    width: 120px;
+    height: 30px;
+    background-color: rgba(115, 231, 210, 0.5);
+    text-align: center;
+    line-height: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+div.alive-cnt {
+    width: 120px;
+    height: 30px;
+    background-color: rgba(240, 248, 255, 0.5);
+    text-align: center;
+    line-height: 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+div.chat-view {
+    width: 300px;
+    max-width: 100%;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+div.chat-wrapper {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(242, 242, 242, 0.8);
+    padding: 5px 15px 5px 5px;
+    border-radius: 15px;
+    margin: 10px 0 0 0;
+    transition: all 0.6s ease;
+    position: relative;
+    overflow-x: hidden;
+    z-index: 1;
+}
+
+div.chat-profile {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-color: azure;
+    text-align: center;
+    line-height: 30px;
+}
+
+div.chat-content-wrapper {
+    padding-left: 10px;
+}
+
+div.chat-nickname {
+    padding-left: 10px;
+    font-weight: bolder;
+}
+
+div.chat-content {
+    white-space: normal;
+    word-break: break-all;
+}

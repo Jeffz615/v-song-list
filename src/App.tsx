@@ -1,6 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {SyncOutlined, YoutubeOutlined, SearchOutlined} from '@ant-design/icons';
-import {Layout, Avatar, Row, Col, Input, Button, BackTop, message, Table, Tag, Drawer} from 'antd';
+import {
+    Layout,
+    Avatar,
+    Row,
+    Col,
+    Input,
+    Button,
+    BackTop,
+    message,
+    Table,
+    Tag,
+    Drawer,
+    notification
+} from 'antd';
 import type {ColumnsType} from 'antd/lib/table';
 import jData from './assets/data.json';
 import copy from 'copy-to-clipboard';
@@ -8,6 +21,8 @@ import lblImage from './assets/lbl.jpg';
 import avatarImage from './assets/avatar.jpg';
 import pixelImage from './assets/pixel.png';
 import './App.css';
+
+const mqtt = require("mqtt/dist/mqtt.min");
 
 const {Content} = Layout;
 
@@ -63,17 +78,111 @@ interface IDataType {
     remark: string;
 }
 
+interface IMqAlive {
+    alive?: boolean;
+    nickname?: string;
+    cid?: string;
+}
+
+interface IMqNormalMsg {
+    msg?: string;
+    nickname?: string;
+    ts?: number;
+}
+
 const TdCell = (props: any) => {
     // onMouseEnter, onMouseLeave在数据量多的时候，会严重阻塞表格单元格渲染，严重影响性能
     const {onMouseEnter, onMouseLeave, ...restProps} = props;
     return <td {...restProps} />;
 };
 
+function randomString(e: number) {
+    e = e || 32;
+    let t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
+        a = t.length,
+        n = "";
+    for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+    return n
+}
+
+let g_callbackMap: any = {};
+let g_on = false;
+let mqClientId = localStorage.getItem('clientId') || (randomString(5) + '_NoName');
+if (mqClientId.length < 7) {
+    mqClientId = randomString(5) + '_NoName';
+}
+let nickname = mqClientId.substring(6);
+let mqClient: any;
+let publish = (topic: string, body: string) => {
+    if (mqClient) {
+        mqClient.publish(topic, body);
+    }
+};
+
+function start_listen() {
+    if (g_on) {
+        return;
+    }
+    g_on = true;
+    // mqtt服务器免费申请：https://cloud-intl.emqx.com/console/deployments/new
+    let url = process.env.REACT_APP_MQTT_URL || "wss://broker.emqx.io/mqtt";
+    let username = process.env.REACT_APP_USERNAME || "";
+    let password = process.env.REACT_APP_PASSWORD || "";
+    mqClient = mqtt.connect(url, {
+        clientId: mqClientId,
+        username: username,
+        password: password,
+        will: {
+            topic: 'u0/alive/' + mqClientId,
+            payload: '',
+            qos: 0,
+            retain: true,
+        }
+    });
+    mqClient.on('connect', () => {
+        mqClient.subscribe('u0/alive/+');
+        mqClient.subscribe('u0/notice');
+        mqClient.subscribe('u0/broadcast');
+        mqClient.publish('u0/alive/' + mqClientId, JSON.stringify({
+            alive: true,
+            nickname: nickname,
+        }), {qos: 0, retain: true});
+        localStorage.setItem('clientId', mqClientId);
+    });
+    mqClient.on('message', (topic: string, payload: Uint8Array, packet: any) => {
+        try {
+            let t = topic.split('/')[1];
+            if (t in g_callbackMap) {
+                g_callbackMap[t](topic, payload, packet);
+            }
+        } catch (e) {
+        }
+    });
+}
+
+function registerCallback(topic: string, callback: Function) {
+    g_callbackMap[topic] = callback;
+}
+
+const decoder = new TextDecoder('utf-8');
+
 const App: React.FC = () => {
     const [data, setData] = useState<IDataType[]>(jData?.data);
     const [songNum, setNum] = useState<number>(jData?.data?.length);
     const [searchValue, setSearchValue] = useState<string>('');
     const [visable, setVisible] = useState<boolean>(false);
+    const [notice, setNotice] = useState<string>('');
+    const [aliveList, setAlive] = useState<IMqAlive[]>([]);
+    const [chatMsg, setMsg] = useState<IMqNormalMsg[]>([]);
+    const [MyNickName, setNick] = useState(nickname);
+    const [ChatVis, setChatVis] = useState<boolean>(false);
+    const bottomLine = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        if (bottomLine && bottomLine.current) {
+            bottomLine.current.scrollIntoView({behavior: 'auto'});
+        }
+    }
 
     const showDrawer = () => {
         setVisible(true);
@@ -165,6 +274,108 @@ const App: React.FC = () => {
         },
     ];
 
+    function on_alive(topic: string, payload: Uint8Array, packet: any) {
+        let p: IMqAlive = {};
+        if (payload.length > 0) {
+            p = JSON.parse(decoder.decode(payload));
+        }
+        if (topic.startsWith('u0/alive/')) {
+            const cid = topic.substring('u0/alive/'.length);
+            if ("alive" in p && p.alive) {
+                console.log(`${cid} 在线，nickname: ${p.nickname}`);
+                setAlive(current => [...current.filter(alive => {
+                    return alive.cid !== cid;
+                }), {
+                    nickname: p.nickname ? p.nickname : 'NoName',
+                    cid: cid
+                }]);
+            } else {
+                console.log(`${cid} 已下线`);
+                setAlive(current => current.filter(alive => {
+                    return alive.cid !== cid;
+                }));
+            }
+        }
+    }
+
+    function on_notice(topic: string, payload: Uint8Array, packet: any) {
+        let p: IMqNormalMsg = {};
+        if (payload.length > 0) {
+            p = JSON.parse(decoder.decode(payload));
+        }
+        if (topic === 'u0/notice' && "msg" in p) {
+            if ("msg" in p) {
+                console.log(`公告：${p.msg ? p.msg : ''}`);
+                setNotice(p.msg ? p.msg : '');
+            } else {
+                setNotice('');
+            }
+        }
+    }
+
+    function on_broadcast(topic: string, payload: Uint8Array, packet: any) {
+        let p: IMqNormalMsg = {};
+        if (payload.length > 0) {
+            p = JSON.parse(decoder.decode(payload));
+        }
+        if (topic === 'u0/broadcast') {
+            if ("msg" in p && "nickname" in p) {
+                const nickname = p.nickname ? p.nickname : 'NoName';
+                const msg = p.msg ? p.msg : '';
+                const ts = p.ts ? p.ts : new Date().getTime();
+                console.log(`消息：[${nickname}] => ${msg}`);
+                setMsg(current => [...current.filter(x => {
+                    return x.nickname !== nickname || x.msg !== msg || x.ts !== ts;
+                }), {nickname: nickname, msg: msg, ts: ts}]);
+            }
+        }
+    }
+
+    registerCallback('alive', on_alive);
+    registerCallback('notice', on_notice);
+    registerCallback('broadcast', on_broadcast);
+    try {
+        start_listen();
+    } catch (e) {
+    }
+
+    function changeName() {
+        let name = prompt("请输入你的新名字", MyNickName);
+        if (name && name.trim().length > 0) {
+            setNick(name.trim());
+        }
+    }
+
+    function sengMsg() {
+        let msg = prompt("请输入你要发送的消息", '');
+        if (msg) {
+            if (msg.length > 0 && msg.length <= 1024) {
+                publish('u0/broadcast', JSON.stringify({msg: msg, nickname: MyNickName, ts: new Date().getTime()}));
+            } else {
+                message.warn('发送文本字符数量需要大于0小于等于1024');
+            }
+        }
+    }
+
+    useEffect(() => {
+        const newClientId = mqClientId.substring(0, 6) + MyNickName;
+        localStorage.setItem('clientId', newClientId);
+    }, [MyNickName]);
+
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [chatMsg]);
+
+    useEffect(() => {
+        if (notice !== '') {
+            notification.open({
+                message: '公告',
+                description: notice,
+            });
+        }
+    }, [notice]);
+
     useEffect(() => {
         const timer = setTimeout(() => {
             if (searchValue !== '') {
@@ -207,6 +418,28 @@ const App: React.FC = () => {
 
     return (
         <Layout style={{minHeight: '100%', padding: '10px', backgroundColor: '#ffffff7f'}}>
+            <div className={'chat-pannel'}>
+                <div className={'alive-cnt'} onClick={() => {
+                    setChatVis(!ChatVis);
+                }}>在线人数：{aliveList.length}</div>
+                <div className={ChatVis ? 'chat-pannel-in show' : 'chat-pannel-in'}>
+                    <div className={'nickname-btn'} onClick={changeName}>{MyNickName}</div>
+                    <div className={'send-msg-btn'} onClick={sengMsg}>发送消息</div>
+                </div>
+            </div>
+            <div className={'chat-view'}>
+                {chatMsg.map((value, index) => {
+                    return (<div key={index} className={'chat-wrapper'}>
+                        <div
+                            className={'chat-profile'}>{(value.nickname?.substring(0, 1) || 'N').toUpperCase()}</div>
+                        <div className={'chat-content-wrapper'}>
+                            <div className={'chat-nickname'}>{value.nickname}</div>
+                            <div className={'chat-content'}>{value.msg}</div>
+                        </div>
+                    </div>)
+                })}
+                <div ref={bottomLine}></div>
+            </div>
             <Content>
                 <Row justify={'center'}>
                     <Col
@@ -334,7 +567,11 @@ const App: React.FC = () => {
                         <Col span={24} style={{fontSize: '18px', marginBottom: '20px'}}>
                             <div style={{fontSize: '24px'}}>~幽灵2021置顶更新~</div>
                             <div>大家好，这里是<span
-                                style={{color: "#d58a98", fontSize: '20px', fontWeight: "bolder"}}>幽灵车尔尼桑</span>，一个投稿更新直播随缘的up主
+                                style={{
+                                    color: "#d58a98",
+                                    fontSize: '20px',
+                                    fontWeight: "bolder"
+                                }}>幽灵车尔尼桑</span>，一个投稿更新直播随缘的up主
                             </div>
                             <div>喜欢的事是唱歌，在音乐区和生活区反 复 横 跳</div>
                             <div>【但是看直播很少看唱歌？？？】</div>
@@ -397,13 +634,6 @@ const App: React.FC = () => {
                             <div className={'BtnContent'}>
                                 <img alt={'afdian'} src={'https://afdian.net/favicon.ico'}></img>
                                 <span>爱发电</span>
-                            </div>
-                        </Button>
-                        <Button className={'BtnQuestBox'}
-                                onClick={() => window.open("https://www.tapechat.net/uu/amahost/GW2RNASK")}>
-                            <div className={'BtnContent'}>
-                                <img alt={'afdian'} src={'https://www.tapechat.net/favicon.ico'}></img>
-                                <span>提问箱</span>
                             </div>
                         </Button>
                         <div style={{

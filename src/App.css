@@ -61,6 +61,7 @@ div.chat-pannel {
     position: fixed;
     top: 10px;
     left: 10px;
+    z-index: 999;
 }
 
 div.chat-pannel-in {
@@ -75,7 +76,7 @@ div.nickname-btn,
 div.send-msg-btn {
     width: 120px;
     height: 30px;
-    background-color: rgba(115, 231, 210, 0.5);
+    background-color: rgba(57, 197, 187, 0.9);
     text-align: center;
     line-height: 30px;
     border-radius: 15px;
@@ -86,7 +87,7 @@ div.send-msg-btn {
 div.alive-cnt {
     width: 120px;
     height: 30px;
-    background-color: rgba(240, 248, 255, 0.5);
+    background-color: rgba(240, 248, 255, 0.9);
     text-align: center;
     line-height: 30px;
     border-radius: 15px;
@@ -101,20 +102,30 @@ div.chat-view {
     bottom: 10px;
     left: 10px;
     max-height: 50vh;
+    background-color: rgba(255, 255, 255, 0.2);
     overflow-y: auto;
+    z-index: 999;
+    border-radius: 15px;
+}
+
+div.chat-view.hide {
+    display: none;
+}
+
+div.chat-view>.chat-wrapper:first-child {
+    margin-top: 0;
 }
 
 div.chat-wrapper {
     display: flex;
     flex-direction: row;
-    background-color: rgba(242, 242, 242, 0.8);
+    background-color: rgba(242, 242, 242, 0.9);
     padding: 5px 15px 5px 5px;
     border-radius: 15px;
     margin: 10px 0 0 0;
     transition: all 0.6s ease;
     position: relative;
     overflow-x: hidden;
-    z-index: 1;
 }
 
 div.chat-profile {

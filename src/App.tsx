@@ -175,7 +175,7 @@ const App: React.FC = () => {
     const [aliveList, setAlive] = useState<IMqAlive[]>([]);
     const [chatMsg, setMsg] = useState<IMqNormalMsg[]>([]);
     const [MyNickName, setNick] = useState(nickname);
-    const [ChatVis, setChatVis] = useState<boolean>(false);
+    const [ChatVis, setChatVis] = useState<number>(0);
     const bottomLine = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -420,14 +420,14 @@ const App: React.FC = () => {
         <Layout style={{minHeight: '100%', padding: '10px', backgroundColor: '#ffffff7f'}}>
             <div className={'chat-pannel'}>
                 <div className={'alive-cnt'} onClick={() => {
-                    setChatVis(!ChatVis);
+                    setChatVis((ChatVis + 1) % 3);
                 }}>在线人数：{aliveList.length}</div>
-                <div className={ChatVis ? 'chat-pannel-in show' : 'chat-pannel-in'}>
+                <div className={ChatVis === 1 ? 'chat-pannel-in show' : 'chat-pannel-in'}>
                     <div className={'nickname-btn'} onClick={changeName}>{MyNickName}</div>
                     <div className={'send-msg-btn'} onClick={sengMsg}>发送消息</div>
                 </div>
             </div>
-            <div className={'chat-view'}>
+            <div className={ChatVis < 2 ? 'chat-view' : 'chat-view hide'}>
                 {chatMsg.map((value, index) => {
                     return (<div key={index} className={'chat-wrapper'}>
                         <div

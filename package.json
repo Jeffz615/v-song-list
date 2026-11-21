@@ -13,7 +13,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "data": "python trans.py",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name v-song-list"
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@ant-design/icons": "^6.3.4",

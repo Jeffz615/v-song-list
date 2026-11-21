@@ -1,9 +1,13 @@
 {
-  // Cloudflare Pages 项目配置：构建产物由 Pages 自动发布，无需 deploy 命令。
-  // 不要用 `wrangler deploy`（那是 Workers 的命令，会报 Missing entry-point）；
-  // 本地手动直传请用 `npm run deploy`（内部调用 wrangler pages deploy）。
+  // Cloudflare Workers + 静态资源项目配置。
+  // 面板构建设置：构建命令 npm run build ｜ 部署命令 npx wrangler deploy ｜ 预览命令 npx wrangler dev
+  // 本地手动部署：npm run deploy
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "v-song-list",
   "compatibility_date": "2026-11-21",
-  "pages_build_output_dir": "dist"
+  "assets": {
+    "directory": "./dist",
+    // 未命中静态资源的路径一律回 index.html 并返回 200（SPA 回退）
+    "not_found_handling": "single-page-application"
+  }
 }

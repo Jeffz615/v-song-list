@@ -1,14 +1,46 @@
+# ---------- 依赖与构建产物 ----------
 /node_modules
-/.pnp
-.pnp.js
-/coverage
-/build
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+/dist
+/.vite
+/.wrangler
+*.tsbuildinfo
 
+# ---------- 环境变量与密钥 ----------
+.env
+.env.*
+!.env.example
+dev.vars
+.dev.vars
+*.pem
+
+# ---------- 编辑器 / IDE ----------
+/.idea
+/.vscode
+*.iml
+
+# ---------- 本地工具与 Agent 产物 ----------
+/.workbuddy
+
+# ---------- Python（trans.py 生成歌单数据） ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---------- Office 临时文件（Excel 打开时的锁文件） ----------
+~$*
+*.tmp
+
+# ---------- 系统与日志 ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+
+# ---------- 本地验证截图 ----------
+/*.local.png
+/screenshots/

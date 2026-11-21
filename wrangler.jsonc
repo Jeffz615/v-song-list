@@ -1,0 +1,6 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "v-song-list",
+  "compatibility_date": "2026-11-21",
+  "pages_build_output_dir": "dist"
+}

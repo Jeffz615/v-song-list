@@ -85,8 +85,17 @@ python trans.py          # 等价于 npm run data
    - Framework preset：`None`
    - Build command：`npm run build`
    - Build output directory：`dist`
+   - **Deploy command：必须留空**（Pages 会自动发布 output directory；填 `npx wrangler deploy` 会直接构建失败，见下方常见问题）
    - Node 版本：仓库根目录的 `.nvmrc` 已指定 `22`，无需额外配置；
 4. 保存并部署，此后每次 push 自动构建。
+
+### 常见问题
+
+**`✘ [ERROR] Missing entry-point to Worker script or to assets directory`**
+
+说明 Pages 项目的 **Deploy command** 里填了 `npx wrangler deploy`。`wrangler deploy` 是 Workers 的部署命令，它需要 `main` 或 `assets.directory` 配置；而本项目用 `pages_build_output_dir` 声明为 Pages 项目，两条配置互斥，所以必然报错（日志里还会先出现一句 `It seems that you have run wrangler deploy on a Pages project` 的警告）。
+
+修复：Pages 项目 → **Settings** → **Build** → **Deploy command** 清空保存，再 Retry deployment。Git 集成模式下不需要任何 deploy 命令，构建产物目录会被自动发布。
 
 ### 方式二：Wrangler 直传
 
@@ -109,6 +118,7 @@ Pages 项目 → **Custom domains** → 添加 `u0song.com`，按提示在 DNS �
 
 ## 更新记录
 
+- 修复 Cloudflare Pages 构建失败：Deploy command 误填 `npx wrangler deploy`（Workers 语法），改为留空；`public/_headers` 补上入口 HTML 的 `must-revalidate`；
 - 构建工具由 Create React App（react-scripts 5）迁移到 Vite 8，React 升级到 19，Ant Design 升级到 6；
 - 移除 MQTT 在线聊天室（在线人数、广播消息、公告），不再依赖公共 MQTT Broker，页面变为纯静态；
 - 单文件 `App.tsx` 拆分到 `components` / `hooks` / `lib`；

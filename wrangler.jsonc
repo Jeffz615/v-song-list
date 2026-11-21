@@ -1,4 +1,7 @@
 {
+  // Cloudflare Pages 项目配置：构建产物由 Pages 自动发布，无需 deploy 命令。
+  // 不要用 `wrangler deploy`（那是 Workers 的命令，会报 Missing entry-point）；
+  // 本地手动直传请用 `npm run deploy`（内部调用 wrangler pages deploy）。
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "v-song-list",
   "compatibility_date": "2026-11-21",

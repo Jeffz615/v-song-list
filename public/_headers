@@ -7,5 +7,12 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# 入口 HTML 每次都回源校验，保证发版后能立刻拿到新的资源引用
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 /data_hash.txt
   Cache-Control: no-cache

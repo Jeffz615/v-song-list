@@ -7,7 +7,7 @@
    发版需更新资源时递增 CACHE_VERSION。
    ============================================================ */
 
-const CACHE_VERSION = 'v3.0.0';
+const CACHE_VERSION = 'v3.1.0';
 const CACHE_NAME = `ghost-songlist-${CACHE_VERSION}`;
 const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './favicon.jpg'];
 

@@ -60,7 +60,7 @@ const SongRow = memo(function SongRow({
           ¥{song.money}
         </button>
       ) : (
-        <span className="price-badge empty" aria-hidden="true" />
+        <span className="price-badge is-empty" aria-hidden="true" />
       )}
 
       {song.link ? (
@@ -76,7 +76,7 @@ const SongRow = memo(function SongRow({
           {CLIP_ICON}
         </a>
       ) : (
-        <span aria-hidden="true" />
+        <span className="clip-link is-empty" aria-hidden="true" />
       )}
 
       <div className="song-main">
@@ -99,7 +99,7 @@ const SongRow = memo(function SongRow({
           ))}
         </div>
       ) : (
-        <span aria-hidden="true" />
+        <span className="song-tags is-empty" aria-hidden="true" />
       )}
 
       <button

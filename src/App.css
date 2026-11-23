@@ -5,7 +5,9 @@
 .page {
   display: flex;
   justify-content: center;
-  padding: clamp(10px, 3vw, 40px) clamp(8px, 2vw, 24px) 90px;
+  /* 顶部为 iPhone 灵动岛/刘海让出安全区（桌面端 env 为 0，无影响） */
+  padding: calc(env(safe-area-inset-top, 0px) + clamp(10px, 3vw, 40px))
+    clamp(8px, 2vw, 24px) calc(env(safe-area-inset-bottom, 0px) + 90px);
 }
 
 .panel {
@@ -73,11 +75,27 @@
   color: var(--text-muted);
 }
 
+/* ---------- iPhone 灵动岛/状态栏安全区遮罩 ---------- */
+/* 仅在 PWA 独立窗口 + 刘屏机型有高度；桌面与普通浏览器高度为 0，不可见 */
+.top-veil {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 35;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(20, 16, 44, 0.94) 70%, rgba(20, 16, 44, 0));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
 /* ---------- 工具栏（吸顶） ---------- */
 
 .toolbar {
   position: sticky;
-  top: 8px;
+  /* 吸顶时停在灵动岛/状态栏下方，否则会被系统状态栏盖住且无法点击 */
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
   z-index: 30;
   display: flex;
   gap: 10px;
@@ -110,7 +128,8 @@
   width: 100%;
   height: 44px;
   padding: 0 40px;
-  font-size: 15px;
+  /* ≥16px：iOS Safari 聚焦小于 16px 的输入框会自动放大页面 */
+  font-size: 16px;
   color: var(--text);
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--line);
@@ -384,7 +403,9 @@
   box-shadow: 0 0 0 2px var(--star), 0 0 10px rgba(255, 233, 137, 0.6);
 }
 
-.price-badge.empty {
+/* 空占位符复用真实元素的尺寸类，只隐藏内容，保证行高一致。
+   注意不要用 .empty（与列表空状态 .empty 冲突） */
+.is-empty {
   visibility: hidden;
 }
 
@@ -510,7 +531,7 @@
 .backtop {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
   z-index: 40;
   width: clamp(64px, 10vw, 110px);
   padding: 0;
@@ -658,7 +679,7 @@
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 84px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 84px);
   z-index: 60;
   max-width: min(86vw, 420px);
   padding: 12px 20px;
@@ -687,7 +708,8 @@
 
 @media (max-width: 719px) {
   .page {
-    padding: 8px 6px 80px;
+    padding: calc(env(safe-area-inset-top, 0px) + 8px) 6px
+      calc(env(safe-area-inset-bottom, 0px) + 80px);
   }
 
   .panel {
@@ -696,7 +718,7 @@
   }
 
   .toolbar {
-    top: 4px;
+    top: calc(env(safe-area-inset-top, 0px) + 4px);
     padding: 8px;
     gap: 8px;
   }
@@ -714,7 +736,7 @@
 
   #searchInput {
     height: 42px;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .syntax-hint {
@@ -800,14 +822,23 @@
     grid-area: meta;
     justify-content: flex-start;
     flex-wrap: wrap;
+    /* 与歌切链接按钮同高，保证付费/免费卡片行高一致 */
+    min-height: 30px;
+    align-items: center;
   }
 
   .copy-btn {
     grid-area: copy;
     background: var(--pink-dim);
+    /* 与第二行的歌切链接按钮同尺寸并右对齐，保证两行按钮圆心垂直对齐 */
+    justify-self: end;
+    width: 30px;
+    height: 30px;
   }
 
   .copy-btn svg {
+    width: 16px;
+    height: 16px;
     fill: var(--pink);
   }
 
@@ -820,7 +851,7 @@
 
   .backtop {
     right: 12px;
-    bottom: 12px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
     width: 58px;
   }
 

@@ -42,6 +42,8 @@ export default function App() {
 
   return (
     <>
+      {/* iPhone 灵动岛/状态栏安全区遮罩（无刘海设备高度为 0，不可见） */}
+      <div className="top-veil" aria-hidden="true" />
       <main className="page">
         <section className="panel">
           <HeroSection

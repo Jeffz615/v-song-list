@@ -13,3 +13,10 @@ createRoot(container).render(
     <App />
   </StrictMode>,
 );
+
+// 生产构建才注册 Service Worker：开发环境避免缓存干扰 HMR
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('/sw.js');
+  });
+}

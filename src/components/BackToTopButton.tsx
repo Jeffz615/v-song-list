@@ -3,6 +3,7 @@ import pixelImage from '../assets/pixel.png';
 
 const VISIBILITY_HEIGHT = 400;
 
+/** 回到顶部：滚动超过一屏后出现的像素小人 */
 export function BackToTopButton() {
   const [visible, setVisible] = useState(false);
 

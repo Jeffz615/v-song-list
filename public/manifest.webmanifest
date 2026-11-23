@@ -1,0 +1,32 @@
+{
+  "name": "幽灵歌单 - 听听幽灵会唱的歌",
+  "short_name": "幽灵歌单",
+  "description": "幽灵车尔尼桑的直播歌单，支持搜索、标签筛选、随机点歌与一键复制点歌指令。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1e1b3a",
+  "theme_color": "#1e1b3a",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -14,5 +14,12 @@
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
+# Service Worker 必须每次校验，否则发版后客户端会长期停在旧缓存
+/sw.js
+  Cache-Control: no-cache
+
+/manifest.webmanifest
+  Cache-Control: public, max-age=600
+
 /data_hash.txt
   Cache-Control: no-cache
